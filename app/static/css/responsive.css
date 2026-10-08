@@ -1,0 +1,120 @@
+/* ============================================================
+   Responsive — Mobile First enhancements
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .search-form {
+    grid-template-columns: 1fr 1fr;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .pkg-layout {
+    grid-template-columns: 1fr;
+  }
+  .pkg-sticky {
+    position: static;
+  }
+  .exp-band {
+    grid-template-columns: 1fr;
+  }
+  .exp-band.reverse .exp-band-visual,
+  .exp-band.reverse .exp-band-content { order: unset; }
+  .gallery-grid { columns: 2; }
+}
+
+/* Mobile nav */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .nav-cta { display: none; }
+  .hamburger { display: flex; }
+  .navbar.scrolled .logo-text,
+  .navbar.transparent .logo-text { color: inherit; }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  :root {
+    --header-height: 60px;
+    --space-3xl: 3rem;
+  }
+
+  .trust-bar {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  .search-card {
+    margin-top: -2rem;
+    padding: 1.25rem;
+  }
+  .search-form {
+    grid-template-columns: 1fr;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+  .footer-bottom-links {
+    justify-content: center;
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  .hero-actions .btn { width: 100%; max-width: 280px; }
+  .mobile-sticky-cta {
+    display: flex;
+  }
+  body { padding-bottom: 70px; }
+  .gallery-grid { columns: 1; }
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+  .dest-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+  .service-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .filter-bar {
+    flex-direction: column;
+  }
+  .filter-bar .form-group {
+    width: 100%;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 414px) {
+  .dest-grid {
+    grid-template-columns: 1fr;
+  }
+  .service-grid {
+    grid-template-columns: 1fr;
+  }
+  .trust-bar {
+    grid-template-columns: 1fr 1fr;
+  }
+  .hero-content {
+    padding: 5rem 1rem 3rem;
+  }
+}
+
+/* Large screens */
+@media (min-width: 1440px) {
+  :root {
+    --container: min(1280px, 100% - 3rem);
+    --container-wide: min(1480px, 100% - 3rem);
+  }
+}

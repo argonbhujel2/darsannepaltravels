@@ -1,0 +1,12 @@
+{% extends 'admin/base.html' %}
+{% block title %}{{ 'Edit' if service else 'New' }} Service{% endblock %}
+{% block content %}
+<div class="admin-header"><h1>{{ 'Edit' if service else 'New' }} Service</h1></div>
+<form method="post" class="admin-card admin-form">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<div class="form-group"><label class="form-label">Title *</label><input type="text" name="title" class="form-control" required value="{{ service.title if service else '' }}"></div>
+<div class="form-group"><label class="form-label">Description</label><textarea name="description" class="form-control" rows="4">{{ service.description if service else '' }}</textarea></div>
+{% if service %}<div class="form-group"><label class="form-label">Status</label><select name="status" class="form-control form-select"><option value="published">Published</option><option value="draft" {% if service.status=='draft' %}selected{% endif %}>Draft</option></select></div>{% endif %}
+<div class="form-actions"><button type="submit" class="btn btn-primary">Save</button><a href="{{ url_for('admin.services_list') }}" class="btn btn-outline">Cancel</a></div>
+</form>
+{% endblock %}

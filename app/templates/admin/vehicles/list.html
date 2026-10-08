@@ -1,0 +1,13 @@
+{% extends 'admin/base.html' %}
+{% block title %}Vehicles{% endblock %}
+{% block content %}
+<div class="admin-header"><h1>Vehicles</h1><a href="{{ url_for('admin.vehicle_new') }}" class="btn btn-primary btn-sm">+ New</a></div>
+<div class="admin-card"><div class="table-wrap"><table>
+<thead><tr><th>Name</th><th>Type</th><th>Capacity</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>
+<tbody>{% for v in vehicles %}
+<tr><td>{{ v.name }}</td><td>{{ v.vehicle_type }}</td><td>{{ v.capacity or '—' }}</td><td>{{ v.price }}</td><td>{{ v.status }}</td>
+<td><a href="{{ url_for('admin.vehicle_edit', id=v.id) }}">Edit</a>
+<form method="post" action="{{ url_for('admin.vehicle_delete', id=v.id) }}" style="display:inline" data-confirm="Delete?"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit" class="btn btn-ghost btn-sm" style="color:var(--color-danger)">Delete</button></form></td></tr>
+{% else %}<tr><td colspan="6">None.</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'admin/base.html' %}
+{% block title %}Team{% endblock %}
+{% block content %}
+<div class="admin-header"><h1>Team / Guides</h1><a href="{{ url_for('admin.team_new') }}" class="btn btn-primary btn-sm">+ Add</a></div>
+<div class="admin-card"><div class="table-wrap"><table>
+<thead><tr><th>Name</th><th>Position</th><th>Status</th><th>Actions</th></tr></thead>
+<tbody>{% for m in team %}
+<tr><td>{{ m.name }}</td><td>{{ m.position or '—' }}</td><td>{{ m.status }}</td>
+<td><a href="{{ url_for('admin.team_edit', id=m.id) }}">Edit</a>
+<form method="post" action="{{ url_for('admin.team_delete', id=m.id) }}" style="display:inline" data-confirm="Delete?"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit" class="btn btn-ghost btn-sm" style="color:var(--color-danger)">Delete</button></form></td></tr>
+{% else %}<tr><td colspan="4">None.</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}About Us | Darshan Nepal Travel & Tours{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container"><h1>About Us</h1><p>Your trusted partner for discovering Nepal.</p></div>
+</section>
+<section class="section">
+  <div class="container" style="max-width:800px">
+    <h2>Who We Are</h2>
+    <p style="margin:1rem 0 1.5rem">Darshan Nepal Travel &amp; Tours is a Nepal-based travel agency based in Urlabari, Koshi Province 56604. We offer domestic and international travel packages, pilgrimage tours, trekking, sightseeing, school and team trips, vehicle booking, air ticketing, guiding services and more.</p>
+
+    <h2>Our Mission</h2>
+    <p style="margin:1rem 0 1.5rem">To help travelers discover Nepal — its mountains, culture, sacred places and hidden valleys — with reliable planning, local knowledge and genuine care.</p>
+
+    <h2>What We Offer</h2>
+    <ul style="margin:1rem 0 1.5rem">
+      <li style="padding:0.3rem 0">• Domestic &amp; international travel packages</li>
+      <li style="padding:0.3rem 0">• Pilgrimage tours (Badri-Kedar, Char Dham, Pathibhara, Kalinchowk)</li>
+      <li style="padding:0.3rem 0">• Trekking, hiking &amp; adventure</li>
+      <li style="padding:0.3rem 0">• School, team &amp; family travel</li>
+      <li style="padding:0.3rem 0">• Vehicle booking &amp; hire</li>
+      <li style="padding:0.3rem 0">• Air ticketing &amp; online travel services</li>
+      <li style="padding:0.3rem 0">• Guiding &amp; helicopter services (on request)</li>
+    </ul>
+
+    <h2>Why Travel With Us</h2>
+    <p style="margin:1rem 0 1.5rem">We are local, reachable and focused on experience. Rated {{ google_rating }}/5 on Google from {{ review_count }} reviews. Contact us to plan your next journey.</p>
+
+    {% if team %}
+    <h2 style="margin-top:2rem">Our Team</h2>
+    <div class="feature-grid" style="margin-top:1.25rem">
+      {% for m in team %}
+      <div class="feature-card">
+        <h3>{{ m.name }}</h3>
+        {% if m.position %}<p class="text-muted text-small">{{ m.position }}</p>{% endif %}
+        {% if m.bio %}<p style="font-size:var(--text-small);margin-top:0.5rem">{{ m.bio }}</p>{% endif %}
+        {% if m.languages %}<p class="text-xs text-muted" style="margin-top:0.5rem">Languages: {{ m.languages }}</p>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div style="margin-top:2.5rem">
+      <a href="{{ url_for('enquiries.plan_trip') }}" class="btn btn-primary">Plan Your Trip</a>
+      <a href="{{ url_for('main.contact') }}" class="btn btn-outline">Contact Us</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

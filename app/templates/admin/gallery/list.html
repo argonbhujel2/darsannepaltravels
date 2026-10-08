@@ -1,0 +1,12 @@
+{% extends 'admin/base.html' %}
+{% block title %}Gallery{% endblock %}
+{% block content %}
+<div class="admin-header"><h1>Gallery</h1><a href="{{ url_for('admin.gallery_new') }}" class="btn btn-primary btn-sm">+ Add Image</a></div>
+<div class="admin-card"><div class="table-wrap"><table>
+<thead><tr><th>URL</th><th>Category</th><th>Alt</th><th>Actions</th></tr></thead>
+<tbody>{% for img in images %}
+<tr><td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">{{ img.image_url[:50] }}…</td><td>{{ img.category or '—' }}</td><td>{{ img.alt_text or '—' }}</td>
+<td><form method="post" action="{{ url_for('admin.gallery_delete', id=img.id) }}" data-confirm="Delete?"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit" class="btn btn-ghost btn-sm" style="color:var(--color-danger)">Delete</button></form></td></tr>
+{% else %}<tr><td colspan="4">No images. Add image URLs (Cloudinary or external).</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ site_settings.get('default_seo_title', 'Darshan Nepal Travel & Tours') }}{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}{{ site_settings.get('default_seo_description', 'Trusted travel agency in Urlabari, Koshi Province. Nepal tour packages, pilgrimage, trekking & more.') }}{% endblock %}">
+  <meta name="keywords" content="{% block meta_keywords %}Darshan Nepal Travel, Nepal tour packages, travel agency Urlabari, Mustang tour, Rara Lake, Pathibhara{% endblock %}">
+  <link rel="canonical" href="{% block canonical %}{{ request.url }}{% endblock %}">
+  <!-- Open Graph -->
+  <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+  <meta property="og:title" content="{% block og_title %}{{ self.title() }}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{{ self.meta_description() }}{% endblock %}">
+  <meta property="og:url" content="{{ request.url }}">
+  <meta property="og:site_name" content="{{ business_name }}">
+  {% block og_image %}{% endblock %}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#1a3c34">
+  {% if favicon_url %}
+  <link rel="icon" href="{{ favicon_url }}" type="image/x-icon">
+  <link rel="apple-touch-icon" href="{{ favicon_url }}">
+  {% endif %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+  {% block extra_css %}{% endblock %}
+  {% block structured_data %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TravelAgency",
+    "name": "{{ business_name }}",
+    "description": "Nepal-based travel agency offering domestic and international packages, pilgrimage, trekking, vehicle booking and more.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Urlabari",
+      "addressRegion": "Koshi Province",
+      "postalCode": "56604",
+      "addressCountry": "NP"
+    },
+    "telephone": "{{ business_phone }}",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "{{ google_rating }}",
+      "reviewCount": "{{ review_count }}",
+      "bestRating": "5"
+    },
+    "url": "{{ request.url_root }}"
+  }
+  </script>
+  {% endblock %}
+</head>
+<body>
+  {% if announcement and announcement.strip() %}
+  <div class="announcement-bar" role="banner">{{ announcement }}</div>
+  {% endif %}
+
+  {% include 'partials/navbar.html' %}
+
+  <main id="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include 'partials/footer.html' %}
+
+  <!-- Mobile sticky CTA -->
+  <div class="mobile-sticky-cta" aria-label="Quick actions">
+    <a href="tel:{{ business_phone }}" class="btn btn-outline">Call</a>
+    <a href="{{ url_for('enquiries.plan_trip') }}" class="btn btn-primary">Enquire Now</a>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

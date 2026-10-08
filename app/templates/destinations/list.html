@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Destinations | Darshan Nepal Travel & Tours{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container"><h1>Destinations</h1><p>Explore Nepal and nearby regions with local expertise.</p></div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="breadcrumbs"><a href="{{ url_for('main.home') }}">Home</a> <span>/</span> Destinations</div>
+    <div class="dest-grid">
+      {% for dest in destinations %}
+      <a href="{{ url_for('destinations.destination_detail', slug=dest.slug) }}" class="dest-card reveal">
+        {% if dest.featured_image %}
+        <img src="{{ dest.featured_image }}" alt="{{ dest.name }}" loading="lazy" width="400" height="500">
+        {% else %}
+        <div class="dest-card-placeholder"></div>
+        {% endif %}
+        <div class="dest-card-bg"></div>
+        <div class="dest-card-content">
+          <h3>{{ dest.name }}</h3>
+          <p>{{ dest.short_description[:90] if dest.short_description else '' }}{% if dest.short_description and dest.short_description|length > 90 %}…{% endif %}</p>
+        </div>
+      </a>
+      {% else %}
+      <div class="empty-state"><p>Destinations coming soon.</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'admin/base.html' %}
+{% block title %}Customers{% endblock %}
+{% block content %}
+<div class="admin-header"><h1>Customers</h1></div>
+<div class="admin-card"><div class="table-wrap"><table>
+<thead><tr><th>Name</th><th>Phone</th><th>Email</th><th>Created</th></tr></thead>
+<tbody>
+{% for c in customers %}
+<tr><td>{{ c.name }}</td><td>{{ c.phone }}</td><td>{{ c.email or '—' }}</td><td>{{ c.created_at.strftime('%d %b %Y') if c.created_at else '' }}</td></tr>
+{% else %}<tr><td colspan="4">No customers yet.</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

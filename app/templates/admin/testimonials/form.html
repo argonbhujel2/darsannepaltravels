@@ -1,0 +1,16 @@
+{% extends 'admin/base.html' %}
+{% block title %}{{ 'Edit' if testimonial else 'New' }} Testimonial{% endblock %}
+{% block content %}
+<div class="admin-header"><h1>{{ 'Edit' if testimonial else 'New' }} Testimonial</h1></div>
+<form method="post" class="admin-card admin-form">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<div class="form-group"><label class="form-label">Name *</label><input type="text" name="name" class="form-control" required value="{{ testimonial.name if testimonial else '' }}"></div>
+<div class="form-group"><label class="form-label">Location</label><input type="text" name="location" class="form-control" value="{{ testimonial.location if testimonial else '' }}"></div>
+<div class="form-group"><label class="form-label">Review *</label><textarea name="review" class="form-control" rows="4" required>{{ testimonial.review if testimonial else '' }}</textarea></div>
+<div class="form-group"><label class="form-label">Rating</label><select name="rating" class="form-control form-select">{% for r in range(1,6) %}<option value="{{ r }}" {% if testimonial and testimonial.rating==r %}selected{% elif not testimonial and r==5 %}selected{% endif %}>{{ r }}</option>{% endfor %}</select></div>
+<div class="form-group"><label class="form-label">Package</label><input type="text" name="package_title" class="form-control" value="{{ testimonial.package_title if testimonial else '' }}"></div>
+<div class="form-group"><label><input type="checkbox" name="featured" value="1" {% if testimonial and testimonial.featured %}checked{% endif %}> Featured</label></div>
+<div class="form-group"><label class="form-label">Status</label><select name="status" class="form-control form-select"><option value="published">Published</option><option value="draft" {% if testimonial and testimonial.status=='draft' %}selected{% endif %}>Draft</option></select></div>
+<div class="form-actions"><button type="submit" class="btn btn-primary">Save</button><a href="{{ url_for('admin.testimonials_list') }}" class="btn btn-outline">Cancel</a></div>
+</form>
+{% endblock %}

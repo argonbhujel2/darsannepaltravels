@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% block title %}Plan Your Trip | Darshan Nepal Travel & Tours{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1>Plan Your Trip</h1>
+    <p>Tell us where you want to go — we'll help you shape the journey.</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container" style="max-width:720px">
+    {% if success and enquiry %}
+    <div class="alert alert-success">
+      <strong>Your journey request has been received.</strong><br>
+      Reference ID: <strong>{{ enquiry.reference_id }}</strong><br>
+      {% if enquiry.package_title %}Package: {{ enquiry.package_title }}<br>{% endif %}
+      {% if enquiry.destination %}Destination: {{ enquiry.destination }}<br>{% endif %}
+      {% if enquiry.travel_date %}Travel Date: {{ enquiry.travel_date.strftime('%d %b %Y') }}<br>{% endif %}
+      Travelers: {{ enquiry.travelers }}
+    </div>
+    <p style="margin-top:1rem"><a href="{{ url_for('main.home') }}" class="btn btn-primary">Back Home</a>
+    <a href="tel:{{ business_phone }}" class="btn btn-outline">Call Us</a></p>
+    {% else %}
+    {% if errors %}
+    <div class="alert alert-danger">
+      {% for e in errors %}<div>{{ e }}</div>{% endfor %}
+    </div>
+    {% endif %}
+    <form method="post" id="enquiry-form" class="admin-card" novalidate>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <div class="enquiry-step">
+        <h3 style="margin-bottom:1rem">Step 1 — Trip</h3>
+        <div class="form-group">
+          <label class="form-label" for="destination">Destination</label>
+          <input type="text" name="destination" id="destination" class="form-control" placeholder="e.g. Mustang, Pathibhara" value="{{ request.form.get('destination', '') }}">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="package_id">Package (optional)</label>
+          <select name="package_id" id="package_id" class="form-control form-select">
+            <option value="">Select a package</option>
+            {% for p in packages %}
+            <option value="{{ p.id }}" {% if request.args.get('package')|int == p.id or request.form.get('package_id')|int == p.id %}selected{% endif %}>{{ p.title }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="travel_type">Travel Type</label>
+          <select name="travel_type" id="travel_type" class="form-control form-select">
+            <option value="">Select</option>
+            {% for t in ['Adventure','Trekking','Pilgrimage','Family','School','Team','Sightseeing','Cultural','Other'] %}
+            <option value="{{ t }}">{{ t }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <button type="button" class="btn btn-primary" data-next>Continue</button>
+      </div>
+
+      <div class="enquiry-step" style="display:none">
+        <h3 style="margin-bottom:1rem">Step 2 — Travel Details</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="travel_date">Travel Date</label>
+            <input type="date" name="travel_date" id="travel_date" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="return_date">Return Date</label>
+            <input type="date" name="return_date" id="return_date" class="form-control">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="adults">Adults</label>
+            <input type="number" name="adults" id="adults" class="form-control" min="1" value="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="children">Children</label>
+            <input type="number" name="children" id="children" class="form-control" min="0" value="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="travelers">Total Travelers</label>
+          <input type="number" name="travelers" id="travelers" class="form-control" min="1" value="1">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="pickup_location">Pickup Location</label>
+          <input type="text" name="pickup_location" id="pickup_location" class="form-control" placeholder="e.g. Kathmandu, Urlabari">
+        </div>
+        <button type="button" class="btn btn-outline" data-prev>Back</button>
+        <button type="button" class="btn btn-primary" data-next>Continue</button>
+      </div>
+
+      <div class="enquiry-step" style="display:none">
+        <h3 style="margin-bottom:1rem">Step 3 — Contact</h3>
+        <div class="form-group">
+          <label class="form-label" for="name">Full Name *</label>
+          <input type="text" name="name" id="name" class="form-control" required value="{{ request.form.get('name', '') }}">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="phone">Phone *</label>
+          <input type="tel" name="phone" id="phone" class="form-control" required value="{{ request.form.get('phone', '') }}">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input type="email" name="email" id="email" class="form-control" value="{{ request.form.get('email', '') }}">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="message">Message</label>
+          <textarea name="message" id="message" class="form-control" rows="4" placeholder="Any special requests or questions"></textarea>
+        </div>
+        <button type="button" class="btn btn-outline" data-prev>Back</button>
+        <button type="submit" class="btn btn-primary">Submit Enquiry</button>
+      </div>
+    </form>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/enquiry.js') }}"></script>
+{% endblock %}

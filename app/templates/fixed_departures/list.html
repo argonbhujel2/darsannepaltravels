@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Fixed Departures | Darshan Nepal Travel{% endblock %}
+{% block content %}
+<section class="page-hero"><div class="container"><h1>Fixed Departures</h1><p>Scheduled group departures with set dates.</p></div></section>
+<section class="section"><div class="container">
+  {% if departures %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Package</th><th>Departure</th><th>Return</th><th>Seats</th><th>Price</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        {% for d in departures %}
+        <tr>
+          <td>{{ d.package.title if d.package else '—' }}</td>
+          <td>{{ d.departure_date.strftime('%d %b %Y') if d.departure_date else '—' }}</td>
+          <td>{{ d.return_date.strftime('%d %b %Y') if d.return_date else '—' }}</td>
+          <td>
+            {{ d.available_seats }}/{{ d.total_seats }}
+            {% if d.available_seats and d.available_seats <= 4 and d.status in ['Open','Filling Fast','Almost Full'] %}
+            <span class="badge badge-warning">Only {{ d.available_seats }} left</span>
+            {% endif %}
+          </td>
+          <td>{{ d.price or 'On Request' }}</td>
+          <td><span class="badge badge-info">{{ d.status }}</span></td>
+          <td><a href="{{ url_for('enquiries.plan_trip') }}" class="btn btn-sm btn-primary">Enquire</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <h3>No upcoming departures</h3>
+    <p>Enquire for custom dates — <a href="{{ url_for('enquiries.plan_trip') }}">Plan Your Trip</a></p>
+  </div>
+  {% endif %}
+</div></section>
+{% endblock %}

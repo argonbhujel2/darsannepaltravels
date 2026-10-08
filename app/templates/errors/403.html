@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Access Denied | Darshan Nepal Travel{% endblock %}
+{% block content %}
+<section class="section" style="min-height:60vh;display:flex;align-items:center">
+  <div class="container" style="text-align:center;max-width:520px">
+    <p class="eyebrow">403</p>
+    <h1>Access Denied</h1>
+    <p style="color:var(--color-muted);margin:1rem 0 2rem">You don't have permission to view this page.</p>
+    <a href="{{ url_for('main.home') }}" class="btn btn-primary">Back Home</a>
+  </div>
+</section>
+{% endblock %}

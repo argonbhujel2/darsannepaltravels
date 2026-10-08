@@ -1,0 +1,14 @@
+{% extends 'admin/base.html' %}
+{% block title %}Destinations{% endblock %}
+{% block content %}
+<div class="admin-header"><h1>Destinations</h1><a href="{{ url_for('admin.destination_new') }}" class="btn btn-primary btn-sm">+ New</a></div>
+<div class="admin-card"><div class="table-wrap"><table>
+<thead><tr><th>Name</th><th>Slug</th><th>Status</th><th>Featured</th><th>Actions</th></tr></thead>
+<tbody>
+{% for d in destinations %}
+<tr><td>{{ d.name }}</td><td>{{ d.slug }}</td><td>{{ d.status }}</td><td>{% if d.featured %}Yes{% else %}—{% endif %}</td>
+<td><a href="{{ url_for('admin.destination_edit', id=d.id) }}">Edit</a>
+<form method="post" action="{{ url_for('admin.destination_delete', id=d.id) }}" style="display:inline" data-confirm="Delete?"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit" class="btn btn-ghost btn-sm" style="color:var(--color-danger)">Delete</button></form></td></tr>
+{% else %}<tr><td colspan="5">None yet.</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

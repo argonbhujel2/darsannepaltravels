@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Something Went Wrong | Darshan Nepal Travel{% endblock %}
+{% block content %}
+<section class="section" style="min-height:60vh;display:flex;align-items:center">
+  <div class="container" style="text-align:center;max-width:520px">
+    <p class="eyebrow">500</p>
+    <h1>Something Went Wrong</h1>
+    <p style="color:var(--color-muted);margin:1rem 0 2rem">We're working on it. Please try again shortly.</p>
+    <a href="{{ url_for('main.home') }}" class="btn btn-primary">Back Home</a>
+    <a href="tel:{{ business_phone }}" class="btn btn-outline">Call Us</a>
+  </div>
+</section>
+{% endblock %}

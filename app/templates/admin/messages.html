@@ -1,0 +1,19 @@
+{% extends 'admin/base.html' %}
+{% block title %}Contact Messages{% endblock %}
+{% block content %}
+<div class="admin-header"><h1>Contact Messages</h1></div>
+<div class="admin-card"><div class="table-wrap"><table>
+<thead><tr><th>Name</th><th>Phone</th><th>Subject</th><th>Status</th><th>Date</th><th></th></tr></thead>
+<tbody>{% for m in messages %}
+<tr><td>{{ m.name }}</td><td>{{ m.phone or '—' }}</td><td>{{ m.subject or '—' }}</td>
+<td><span class="badge">{{ m.status }}</span></td>
+<td>{{ m.created_at.strftime('%d %b %Y') if m.created_at else '' }}</td>
+<td>
+{% if m.status=='New' %}
+<form method="post" action="{{ url_for('admin.message_read', id=m.id) }}" style="display:inline"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit" class="btn btn-sm btn-outline">Mark Read</button></form>
+{% endif %}
+</td></tr>
+<tr><td colspan="6" style="font-size:var(--text-small);color:var(--color-muted);padding-top:0">{{ m.message[:200] }}{% if m.message|length > 200 %}…{% endif %}</td></tr>
+{% else %}<tr><td colspan="6">No messages.</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

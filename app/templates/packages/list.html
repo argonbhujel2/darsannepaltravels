@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}Tour Packages | Darshan Nepal Travel & Tours{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1>Tour Packages</h1>
+    <p>Domestic &amp; international journeys — pilgrimage, adventure, family and more.</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="breadcrumbs"><a href="{{ url_for('main.home') }}">Home</a> <span>/</span> Packages</div>
+    <form class="filter-bar" method="get">
+      <div class="form-group">
+        <label class="form-label" for="f-dest">Destination</label>
+        <select name="destination" id="f-dest" class="form-control form-select">
+          <option value="">All</option>
+          {% for d in destinations %}
+          <option value="{{ d }}" {% if filters.destination == d %}selected{% endif %}>{{ d }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="f-type">Travel Type</label>
+        <select name="type" id="f-type" class="form-control form-select">
+          <option value="">All</option>
+          {% for t in travel_types %}
+          <option value="{{ t }}" {% if filters.type == t %}selected{% endif %}>{{ t }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="f-q">Search</label>
+        <input type="text" name="q" id="f-q" class="form-control" value="{{ filters.q }}" placeholder="Search packages">
+      </div>
+      <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+
+    {% if packages %}
+    <div class="card-grid">
+      {% for pkg in packages %}
+      <article class="package-card">
+        <div class="package-card-img">
+          {% if pkg.featured_image %}
+          <img src="{{ pkg.featured_image }}" alt="{{ pkg.title }}" loading="lazy" width="400" height="250">
+          {% else %}
+          <div style="width:100%;height:100%;background:linear-gradient(135deg,var(--color-primary),var(--color-accent));display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);font-size:1.5rem;">{{ pkg.destination[:3]|upper if pkg.destination else 'NP' }}</div>
+          {% endif %}
+          {% if pkg.travel_type %}<span class="package-card-badge">{{ pkg.travel_type }}</span>{% endif %}
+        </div>
+        <div class="package-card-body">
+          <div class="package-card-meta"><span>{{ pkg.duration }}</span>{% if pkg.difficulty %}<span>{{ pkg.difficulty }}</span>{% endif %}</div>
+          <h3><a href="{{ url_for('packages.package_detail', slug=pkg.slug) }}">{{ pkg.title }}</a></h3>
+          <p>{{ pkg.short_description }}</p>
+          <div class="package-card-footer">
+            <span class="package-price">{{ pkg.starting_price or 'On Request' }}</span>
+            <a href="{{ url_for('packages.package_detail', slug=pkg.slug) }}" class="package-card-arrow">View →</a>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% if pagination.pages > 1 %}
+    <nav class="pagination" aria-label="Pagination">
+      {% if pagination.has_prev %}<a href="?page={{ pagination.prev_num }}&destination={{ filters.destination }}&type={{ filters.type }}&q={{ filters.q }}">Prev</a>{% endif %}
+      {% for p in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+        {% if p %}<a href="?page={{ p }}&destination={{ filters.destination }}&type={{ filters.type }}&q={{ filters.q }}" class="{% if p == pagination.page %}active{% endif %}">{{ p }}</a>
+        {% else %}<span>…</span>{% endif %}
+      {% endfor %}
+      {% if pagination.has_next %}<a href="?page={{ pagination.next_num }}&destination={{ filters.destination }}&type={{ filters.type }}&q={{ filters.q }}">Next</a>{% endif %}
+    </nav>
+    {% endif %}
+    {% else %}
+    <div class="empty-state">
+      <h3>No packages found</h3>
+      <p>Try different filters or <a href="{{ url_for('enquiries.plan_trip') }}">enquire about a custom trip</a>.</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

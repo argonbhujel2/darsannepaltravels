@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Admin{% endblock %} | Darshan Nepal Travel</title>
+  <meta name="robots" content="noindex, nofollow">
+  {% if favicon_url %}<link rel="icon" href="{{ favicon_url }}">{% endif %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body class="admin-body">
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="logo">
+        {% if logo_url %}
+        <img src="{{ logo_url }}" alt="Logo" class="logo-img" width="36" height="36">
+        {% else %}
+        <span class="logo-mark">DN</span>
+        {% endif %}
+        <span class="logo-text">Darshan Nepal<span>Admin</span></span>
+      </div>
+      <nav class="admin-nav">
+        <a href="{{ url_for('admin.dashboard') }}" class="{% if request.endpoint == 'admin.dashboard' %}active{% endif %}">Dashboard</a>
+        <div class="nav-section">Content</div>
+        <a href="{{ url_for('admin.packages_list') }}">Packages</a>
+        <a href="{{ url_for('admin.destinations_list') }}">Destinations</a>
+        <a href="{{ url_for('admin.services_list') }}">Services</a>
+        <a href="{{ url_for('admin.departures_list') }}">Fixed Departures</a>
+        <a href="{{ url_for('admin.blog_list') }}">Blog</a>
+        <a href="{{ url_for('admin.gallery_list') }}">Gallery</a>
+        <a href="{{ url_for('admin.testimonials_list') }}">Testimonials</a>
+        <a href="{{ url_for('admin.team_list') }}">Team</a>
+        <div class="nav-section">Bookings</div>
+        <a href="{{ url_for('admin.enquiries_list') }}">Enquiries</a>
+        <a href="{{ url_for('admin.customers_list') }}">Customers</a>
+        <a href="{{ url_for('admin.vehicles_list') }}">Vehicles</a>
+        <a href="{{ url_for('admin.messages_list') }}">Messages</a>
+        <div class="nav-section">System</div>
+        <a href="{{ url_for('admin.settings') }}">Settings</a>
+        <a href="{{ url_for('admin.activity_logs') }}">Activity Logs</a>
+        <a href="{{ url_for('admin.logout') }}">Logout</a>
+      </nav>
+    </aside>
+    <main class="admin-main">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for cat, msg in messages %}
+          <div class="alert alert-{{ cat }}">{{ msg }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+  <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

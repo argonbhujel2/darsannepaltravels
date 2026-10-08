@@ -1,0 +1,47 @@
+{% extends 'admin/base.html' %}
+{% block title %}Packages{% endblock %}
+{% block content %}
+<div class="admin-header">
+  <h1>Tour Packages</h1>
+  <a href="{{ url_for('admin.package_new') }}" class="btn btn-primary btn-sm">+ New Package</a>
+</div>
+<form method="get" class="filter-bar">
+  <div class="form-group"><input type="search" name="q" class="form-control" placeholder="Search..." value="{{ q }}"></div>
+  <div class="form-group">
+    <select name="status" class="form-control form-select">
+      <option value="">All statuses</option>
+      <option value="published" {% if status=='published' %}selected{% endif %}>Published</option>
+      <option value="draft" {% if status=='draft' %}selected{% endif %}>Draft</option>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-outline btn-sm">Filter</button>
+</form>
+<div class="admin-card">
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Title</th><th>Destination</th><th>Duration</th><th>Type</th><th>Status</th><th>Featured</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for p in packages %}
+        <tr>
+          <td><strong>{{ p.title }}</strong></td>
+          <td>{{ p.destination or '—' }}</td>
+          <td>{{ p.duration or '—' }}</td>
+          <td>{{ p.travel_type or '—' }}</td>
+          <td><span class="badge {% if p.status=='published' %}badge-success{% else %}badge-warning{% endif %}">{{ p.status }}</span></td>
+          <td>{% if p.featured %}Yes{% else %}—{% endif %}</td>
+          <td>
+            <a href="{{ url_for('admin.package_edit', id=p.id) }}">Edit</a>
+            <form method="post" action="{{ url_for('admin.package_delete', id=p.id) }}" style="display:inline" data-confirm="Delete this package?">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="submit" class="btn btn-ghost btn-sm" style="color:var(--color-danger)">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-muted">No packages yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

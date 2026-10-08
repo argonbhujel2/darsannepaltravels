@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Travel Stories | Darshan Nepal Travel{% endblock %}
+{% block content %}
+<section class="page-hero"><div class="container"><h1>Travel Stories</h1><p>Guides, tips and updates from the road.</p></div></section>
+<section class="section"><div class="container">
+  {% if posts %}
+  <div class="card-grid">
+    {% for post in posts %}
+    <article class="package-card">
+      <div class="package-card-body">
+        <div class="package-card-meta"><span>{{ post.category or 'Travel' }}</span>
+          {% if post.published_date %}<span>{{ post.published_date.strftime('%d %b %Y') }}</span>{% endif %}
+        </div>
+        <h3><a href="{{ url_for('blog.post_detail', slug=post.slug) }}">{{ post.title }}</a></h3>
+        <p>{{ post.excerpt }}</p>
+        <a href="{{ url_for('blog.post_detail', slug=post.slug) }}" class="package-card-arrow">Read more →</a>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state"><h3>No stories yet</h3><p>Check back soon for travel guides and tips.</p></div>
+  {% endif %}
+</div></section>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'admin/base.html' %}
+{% block title %}{{ 'Edit' if vehicle else 'New' }} Vehicle{% endblock %}
+{% block content %}
+<div class="admin-header"><h1>{{ 'Edit' if vehicle else 'New' }} Vehicle</h1></div>
+<form method="post" class="admin-card admin-form">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<div class="form-group"><label class="form-label">Name *</label><input type="text" name="name" class="form-control" required value="{{ vehicle.name if vehicle else '' }}"></div>
+<div class="form-row">
+<div class="form-group"><label class="form-label">Type</label><select name="vehicle_type" class="form-control form-select">{% for t in ['Car','Jeep','Van','Hiace','Bus','Tourist Bus'] %}<option value="{{ t }}" {% if vehicle and vehicle.vehicle_type==t %}selected{% endif %}>{{ t }}</option>{% endfor %}</select></div>
+<div class="form-group"><label class="form-label">Model</label><input type="text" name="model" class="form-control" value="{{ vehicle.model if vehicle else '' }}"></div>
+</div>
+<div class="form-row">
+<div class="form-group"><label class="form-label">Capacity</label><input type="number" name="capacity" class="form-control" value="{{ vehicle.capacity if vehicle else '' }}"></div>
+<div class="form-group"><label class="form-label">Price</label><input type="text" name="price" class="form-control" value="{{ vehicle.price if vehicle else 'On Request' }}"></div>
+</div>
+<div class="form-group"><label><input type="checkbox" name="driver_included" value="1" {% if not vehicle or vehicle.driver_included %}checked{% endif %}> Driver Included</label></div>
+<div class="form-group"><label><input type="checkbox" name="ac" value="1" {% if vehicle and vehicle.ac %}checked{% endif %}> AC</label></div>
+<div class="form-group"><label class="form-label">Description</label><textarea name="description" class="form-control" rows="3">{{ vehicle.description if vehicle else '' }}</textarea></div>
+{% if vehicle %}<div class="form-group"><label class="form-label">Status</label><select name="status" class="form-control form-select"><option value="published">Published</option><option value="draft" {% if vehicle.status=='draft' %}selected{% endif %}>Draft</option></select></div>{% endif %}
+<div class="form-actions"><button type="submit" class="btn btn-primary">Save</button><a href="{{ url_for('admin.vehicles_list') }}" class="btn btn-outline">Cancel</a></div>
+</form>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}{{ service.title }} | Darshan Nepal Travel{% endblock %}
+{% block content %}
+<section class="page-hero"><div class="container"><h1>{{ service.title }}</h1></div></section>
+<section class="section"><div class="container" style="max-width:720px">
+  <div class="breadcrumbs"><a href="{{ url_for('main.home') }}">Home</a> <span>/</span> <a href="{{ url_for('services.list_services') }}">Services</a> <span>/</span> {{ service.title }}</div>
+  <p style="margin:1.5rem 0;white-space:pre-line">{{ service.description }}</p>
+  <a href="{{ url_for('enquiries.plan_trip') }}" class="btn btn-primary">Enquire About This Service</a>
+  {% if others %}
+  <h3 style="margin:2.5rem 0 1rem">Other Services</h3>
+  <div class="service-grid">
+    {% for s in others %}
+    <a href="{{ url_for('services.service_detail', slug=s.slug) }}" class="service-card"><div class="service-icon">◆</div><h3>{{ s.title }}</h3></a>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div></section>
+{% endblock %}

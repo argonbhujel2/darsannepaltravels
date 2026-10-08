@@ -1,0 +1,7 @@
+app/static/uploads/*
+!app/static/uploads/.gitkeep
+*.db
+.env
+__pycache__/
+venv/
+.vercel/

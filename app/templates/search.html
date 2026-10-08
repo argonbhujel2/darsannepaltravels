@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Search{% if query %}: {{ query }}{% endif %} | Darshan Nepal Travel{% endblock %}
+{% block content %}
+<section class="page-hero"><div class="container"><h1>Search</h1>
+  <form action="{{ url_for('main.search') }}" method="get" style="max-width:480px;margin:1rem auto 0">
+    <div style="display:flex;gap:0.5rem">
+      <input type="search" name="q" class="form-control" value="{{ query }}" placeholder="Search packages, destinations, stories..." style="flex:1">
+      <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+  </form>
+</div></section>
+<section class="section"><div class="container">
+  {% if query %}
+  {% set total = results.packages|length + results.destinations|length + results.blog|length + results.services|length %}
+  {% if total == 0 %}
+  <div class="empty-state"><h3>No results for "{{ query }}"</h3><p>Try different keywords or <a href="{{ url_for('packages.list_packages') }}">browse packages</a>.</p></div>
+  {% else %}
+  {% if results.packages %}
+  <h2 style="margin-bottom:1rem">Packages</h2>
+  <div class="card-grid" style="margin-bottom:2rem">
+    {% for p in results.packages %}
+    <article class="package-card"><div class="package-card-body">
+      <h3><a href="{{ url_for('packages.package_detail', slug=p.slug) }}">{{ p.title }}</a></h3>
+      <p>{{ p.short_description }}</p>
+    </div></article>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% if results.destinations %}
+  <h2 style="margin-bottom:1rem">Destinations</h2>
+  <div class="card-grid" style="margin-bottom:2rem">
+    {% for d in results.destinations %}
+    <article class="package-card"><div class="package-card-body">
+      <h3><a href="{{ url_for('destinations.destination_detail', slug=d.slug) }}">{{ d.name }}</a></h3>
+      <p>{{ d.short_description }}</p>
+    </div></article>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% if results.blog %}
+  <h2 style="margin-bottom:1rem">Stories</h2>
+  <div class="card-grid" style="margin-bottom:2rem">
+    {% for b in results.blog %}
+    <article class="package-card"><div class="package-card-body">
+      <h3><a href="{{ url_for('blog.post_detail', slug=b.slug) }}">{{ b.title }}</a></h3>
+      <p>{{ b.excerpt }}</p>
+    </div></article>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% if results.services %}
+  <h2 style="margin-bottom:1rem">Services</h2>
+  <div class="service-grid">
+    {% for s in results.services %}
+    <a href="{{ url_for('services.service_detail', slug=s.slug) }}" class="service-card"><h3>{{ s.title }}</h3></a>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endif %}
+  {% endif %}
+</div></section>
+{% endblock %}

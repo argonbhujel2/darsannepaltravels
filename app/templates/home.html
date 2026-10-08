@@ -1,0 +1,326 @@
+{% extends 'base.html' %}
+
+{% block title %}Darshan Nepal Travel & Tours | Discover Nepal — Premium Tour Packages{% endblock %}
+{% block meta_description %}Trusted travel agency in Urlabari, Koshi Province. Mustang, Rara, Pathibhara, Kalinchowk, pilgrimage & adventure packages. 4.8★ from 27 Google reviews.{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg" aria-hidden="true" style="background-image:linear-gradient(160deg, rgba(15,40,34,0.75) 0%, rgba(26,60,52,0.5) 40%, rgba(15,40,34,0.7) 100%), url('{{ site_settings.get('hero_image', 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=1600&q=80') }}'); background-size:cover; background-position:center;"></div>
+  <div class="hero-content">
+    <p class="eyebrow">{{ site_settings.get('hero_eyebrow', 'TRAVEL • EXPLORE • EXPERIENCE NEPAL') }}</p>
+    <h1 class="display">{{ site_settings.get('hero_title', 'Discover Nepal. Experience the Extraordinary.') }}</h1>
+    <p class="hero-desc">{{ site_settings.get('hero_description', 'Explore breathtaking mountains, sacred pilgrimage destinations, hidden valleys and unforgettable journeys with Darshan Nepal Travel & Tours.') }}</p>
+    <div class="hero-actions">
+      <a href="{{ url_for('packages.list_packages') }}" class="btn btn-secondary btn-lg">Explore Packages</a>
+      <a href="{{ url_for('enquiries.plan_trip') }}" class="btn btn-outline-light btn-lg">Plan Your Journey</a>
+    </div>
+    <div class="hero-rating">
+      <span class="stars">★★★★★</span>
+      <span><strong>{{ google_rating }}</strong> Google Rating · {{ review_count }}+ Reviews</span>
+    </div>
+  </div>
+</section>
+
+<!-- SMART SEARCH -->
+<div class="container">
+  <div class="search-card reveal">
+    <form id="smart-search-form" class="search-form" action="{{ url_for('packages.list_packages') }}" method="get">
+      <div class="form-group">
+        <label class="form-label" for="search-destination">Destination</label>
+        <input type="text" id="search-destination" name="destination" class="form-control" placeholder="e.g. Mustang, Rara">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="search-date">Travel Date</label>
+        <input type="date" id="search-date" name="date" class="form-control">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="search-type">Travel Type</label>
+        <select id="search-type" name="type" class="form-control form-select">
+          <option value="">Any Type</option>
+          <option value="Adventure">Adventure</option>
+          <option value="Trekking">Trekking</option>
+          <option value="Pilgrimage">Pilgrimage</option>
+          <option value="Family">Family</option>
+          <option value="School">School</option>
+          <option value="Team">Team</option>
+          <option value="Sightseeing">Sightseeing</option>
+          <option value="Cultural">Cultural</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="search-guests">Guests</label>
+        <input type="number" id="search-guests" name="guests" class="form-control" min="1" placeholder="2" value="2">
+      </div>
+      <button type="submit" class="btn btn-primary">Find My Trip</button>
+    </form>
+  </div>
+</div>
+
+<!-- TRUST -->
+<section class="section">
+  <div class="container">
+    <div class="trust-bar">
+      <div class="trust-item reveal">
+        <div class="trust-value">{{ google_rating }}/5</div>
+        <div class="trust-label">Google Rating</div>
+      </div>
+      <div class="trust-item reveal">
+        <div class="trust-value">{{ review_count }}+</div>
+        <div class="trust-label">Reviews</div>
+      </div>
+      <div class="trust-item reveal">
+        <div class="trust-value">{{ featured_packages|length }}+</div>
+        <div class="trust-label">Tour Packages</div>
+      </div>
+      <div class="trust-item reveal">
+        <div class="trust-value">24/7</div>
+        <div class="trust-label">Travel Support</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED PACKAGES -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="eyebrow">Curated Journeys</p>
+      <h2>Featured Packages</h2>
+      <p>Handpicked experiences across Nepal and beyond — from sacred pilgrimages to high-altitude adventures.</p>
+    </div>
+    <div class="card-grid">
+      {% for pkg in featured_packages %}
+      <article class="package-card reveal">
+        <div class="package-card-img">
+          {% if pkg.featured_image %}
+          <img src="{{ pkg.featured_image }}" alt="{{ pkg.title }}" loading="lazy" width="400" height="250">
+          {% else %}
+          <div style="width:100%;height:100%;background:linear-gradient(135deg,var(--color-primary) 0%,var(--color-primary-light) 50%,var(--color-accent) 100%);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);font-size:2rem;">{{ pkg.destination[:2]|upper if pkg.destination else 'NP' }}</div>
+          {% endif %}
+          {% if pkg.travel_type %}<span class="package-card-badge">{{ pkg.travel_type }}</span>{% endif %}
+        </div>
+        <div class="package-card-body">
+          <div class="package-card-meta">
+            <span>{{ pkg.duration }}</span>
+            {% if pkg.difficulty %}<span>{{ pkg.difficulty }}</span>{% endif %}
+          </div>
+          <h3><a href="{{ url_for('packages.package_detail', slug=pkg.slug) }}">{{ pkg.title }}</a></h3>
+          <p>{{ pkg.short_description }}</p>
+          <div class="package-card-footer">
+            <span class="package-price">{{ pkg.starting_price or 'On Request' }}</span>
+            <a href="{{ url_for('packages.package_detail', slug=pkg.slug) }}" class="package-card-arrow">View Package →</a>
+          </div>
+        </div>
+      </article>
+      {% else %}
+      <div class="empty-state"><p>Packages coming soon. <a href="{{ url_for('enquiries.plan_trip') }}">Enquire about a custom trip</a>.</p></div>
+      {% endfor %}
+    </div>
+    <div style="text-align:center;margin-top:2rem">
+      <a href="{{ url_for('packages.list_packages') }}" class="btn btn-outline">View All Packages</a>
+    </div>
+  </div>
+</section>
+
+<!-- DESTINATIONS -->
+<section class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="eyebrow">Where We Go</p>
+      <h2>Popular Destinations</h2>
+      <p>From the high deserts of Mustang to the sacred hills of Pathibhara — discover Nepal with local expertise.</p>
+    </div>
+    <div class="dest-grid">
+      {% for dest in destinations %}
+      <a href="{{ url_for('destinations.destination_detail', slug=dest.slug) }}" class="dest-card reveal">
+        {% if dest.featured_image %}
+        <img src="{{ dest.featured_image }}" alt="{{ dest.name }}" loading="lazy" width="400" height="500">
+        {% else %}
+        <div class="dest-card-placeholder"></div>
+        {% endif %}
+        <div class="dest-card-bg"></div>
+        <div class="dest-card-content">
+          <h3>{{ dest.name }}</h3>
+          <p>{{ dest.short_description[:80] }}{% if dest.short_description|length > 80 %}…{% endif %}</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    <div style="text-align:center;margin-top:2rem">
+      <a href="{{ url_for('destinations.list_destinations') }}" class="btn btn-outline">All Destinations</a>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="eyebrow">Why Darshan Nepal</p>
+      <h2>Why Choose Us</h2>
+      <p>Local knowledge, reliable service, and journeys designed around your needs.</p>
+    </div>
+    <div class="feature-grid">
+      {% set features = [
+        ('Experienced Travel Team', 'Our team knows the routes, seasons and practicalities of travel across Nepal.'),
+        ('Customized Packages', 'Every itinerary can be tailored — group size, pace, and interests.'),
+        ('Affordable Pricing', 'Transparent options so you can plan with confidence.'),
+        ('Local Knowledge', 'Based in Urlabari, Koshi Province — we understand eastern Nepal and beyond.'),
+        ('Reliable Transportation', 'Vehicle booking and hire with drivers who know the roads.'),
+        ('24/7 Support', 'We stay reachable before, during and after your trip.'),
+        ('Professional Guides', 'Local guides for treks, pilgrimages and cultural tours.'),
+        ('Safe & Comfortable Travel', 'Safety-first planning with comfortable logistics where possible.')
+      ] %}
+      {% for title, desc in features %}
+      <div class="feature-card reveal-scale">
+        <div class="feature-icon">✦</div>
+        <h3>{{ title }}</h3>
+        <p>{{ desc }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="eyebrow">What We Offer</p>
+      <h2>Our Services</h2>
+    </div>
+    <div class="service-grid">
+      {% for s in services %}
+      <a href="{{ url_for('services.service_detail', slug=s.slug) }}" class="service-card reveal-scale">
+        <div class="service-icon">◆</div>
+        <h3>{{ s.title }}</h3>
+        <p>{{ s.description[:80] if s.description else '' }}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- PILGRIMAGE -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="exp-band">
+      <div class="exp-band-visual"{% if site_settings.get('pilgrimage_image') %} style="background-image:linear-gradient(135deg,rgba(26,60,52,0.45),rgba(58,124,165,0.35)),url('{{ site_settings.get('pilgrimage_image') }}');background-size:cover;background-position:center;"{% else %} style="background:linear-gradient(135deg,#1a3c34,#3a7ca5);"{% endif %}></div>
+      <div class="exp-band-content reveal-right">
+        <p class="eyebrow">Sacred Journeys</p>
+        <h2>Pilgrimage Tours</h2>
+        <p>Badri-Kedar, Gaya Kashi Char Dham, Pathibhara, Kalinchowk — carefully planned spiritual journeys with local support.</p>
+        <a href="{{ url_for('packages.list_packages', type='Pilgrimage') }}" class="btn btn-primary" style="margin-top:1.25rem;align-self:flex-start">View Pilgrimage Packages</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ADVENTURE -->
+<section class="section">
+  <div class="container">
+    <div class="exp-band reverse">
+      <div class="exp-band-visual"{% if site_settings.get('adventure_image') %} style="background-image:linear-gradient(135deg,rgba(196,92,38,0.4),rgba(26,60,52,0.45)),url('{{ site_settings.get('adventure_image') }}');background-size:cover;background-position:center;"{% else %} style="background:linear-gradient(135deg,#c45c26,#1a3c34);"{% endif %}></div>
+      <div class="exp-band-content reveal-right">
+        <p class="eyebrow">Beyond the Ordinary</p>
+        <h2>Adventure &amp; Trekking</h2>
+        <p>Mustang’s high desert, Rara’s alpine wilderness, and trails that take you deeper into Nepal’s mountains and culture.</p>
+        <a href="{{ url_for('packages.list_packages', type='Adventure') }}" class="btn btn-primary" style="margin-top:1.25rem;align-self:flex-start">Explore Adventure</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FIXED DEPARTURES -->
+{% if departures %}
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="eyebrow">Join a Group</p>
+      <h2>Fixed Departures</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Package</th><th>Departure</th><th>Seats</th><th>Status</th><th></th></tr>
+        </thead>
+        <tbody>
+          {% for d in departures %}
+          <tr>
+            <td>{{ d.package.title if d.package else '—' }}</td>
+            <td>{{ d.departure_date.strftime('%d %b %Y') if d.departure_date else '—' }}</td>
+            <td>{{ d.available_seats }}/{{ d.total_seats }}</td>
+            <td><span class="badge badge-info">{{ d.status }}</span></td>
+            <td><a href="{{ url_for('enquiries.plan_trip') }}">Enquire</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div style="text-align:center;margin-top:1.5rem">
+      <a href="{{ url_for('fixed_departures.list_departures') }}" class="btn btn-outline">All Departures</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- TESTIMONIALS -->
+{% if testimonials %}
+<section class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="eyebrow">Traveler Voices</p>
+      <h2>{{ google_rating }} / 5 from {{ review_count }} Google Reviews</h2>
+      <p>We value every journey. Full reviews are available on our Google Business profile.</p>
+    </div>
+    <div class="card-grid">
+      {% for t in testimonials %}
+      <div class="feature-card reveal-scale">
+        <div style="color:#f5c518;margin-bottom:0.5rem">{% for i in range(t.rating or 5) %}★{% endfor %}</div>
+        <p style="font-size:var(--text-small);margin-bottom:1rem">"{{ t.review }}"</p>
+        <strong style="font-size:var(--text-small)">{{ t.name }}</strong>
+        {% if t.location %}<span class="text-muted text-xs"> · {{ t.location }}</span>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- BLOG -->
+{% if blog_posts %}
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="eyebrow">From the Road</p>
+      <h2>Travel Stories</h2>
+    </div>
+    <div class="card-grid">
+      {% for post in blog_posts %}
+      <article class="package-card reveal">
+        <div class="package-card-body">
+          <div class="package-card-meta"><span>{{ post.category }}</span></div>
+          <h3><a href="{{ url_for('blog.post_detail', slug=post.slug) }}">{{ post.title }}</a></h3>
+          <p>{{ post.excerpt }}</p>
+          <a href="{{ url_for('blog.post_detail', slug=post.slug) }}" class="package-card-arrow">Read more →</a>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- FINAL CTA -->
+<section class="cta-section">
+  <div class="container">
+    <h2>Your Next Journey Starts Here.</h2>
+    <p>Tell us where you want to go. We'll help you plan the journey.</p>
+    <div class="cta-actions">
+      <a href="{{ url_for('enquiries.plan_trip') }}" class="btn btn-secondary btn-lg">Plan Your Trip</a>
+      <a href="tel:{{ business_phone }}" class="btn btn-outline-light btn-lg">Call Now</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

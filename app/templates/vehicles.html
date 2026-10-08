@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Vehicle Booking | Darshan Nepal Travel{% endblock %}
+{% block content %}
+<section class="page-hero"><div class="container"><h1>Vehicle Booking &amp; Hire</h1><p>Cars, jeeps, vans and buses for your journey across Nepal.</p></div></section>
+<section class="section"><div class="container">
+  {% if success %}<div class="alert alert-success">Vehicle enquiry received. Reference: <strong>{{ ref_id }}</strong></div>{% endif %}
+  {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+  <div class="card-grid" style="margin-bottom:2.5rem">
+    {% for v in vehicles %}
+    <div class="feature-card">
+      <h3>{{ v.name }}</h3>
+      <p class="text-small text-muted">{{ v.vehicle_type }}{% if v.model %} · {{ v.model }}{% endif %}{% if v.capacity %} · {{ v.capacity }} seats{% endif %}</p>
+      <p style="font-size:var(--text-small);margin:0.5rem 0">{{ v.description or '' }}</p>
+      <p class="package-price">{{ v.price or 'On Request' }} {{ v.price_type or '' }}</p>
+    </div>
+    {% else %}
+    <div class="empty-state"><p>Vehicles available on request. Use the form below.</p></div>
+    {% endfor %}
+  </div>
+  <div class="admin-card" style="max-width:600px">
+    <h2 style="margin-bottom:1rem">Request a Vehicle</h2>
+    <form method="post" action="{{ url_for('vehicles.vehicle_enquire') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Name *</label><input type="text" name="name" class="form-control" required></div>
+        <div class="form-group"><label class="form-label">Phone *</label><input type="tel" name="phone" class="form-control" required></div>
+      </div>
+      <div class="form-group"><label class="form-label">Email</label><input type="email" name="email" class="form-control"></div>
+      <div class="form-group"><label class="form-label">Vehicle Type</label>
+        <select name="vehicle_type" class="form-control form-select">
+          <option value="">Any</option>
+          {% for t in ['Car','Jeep','Van','Hiace','Bus','Tourist Bus'] %}<option value="{{ t }}">{{ t }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Pickup</label><input type="text" name="pickup" class="form-control"></div>
+        <div class="form-group"><label class="form-label">Drop-off</label><input type="text" name="dropoff" class="form-control"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Date</label><input type="date" name="date" class="form-control"></div>
+        <div class="form-group"><label class="form-label">Passengers</label><input type="number" name="passengers" class="form-control" min="1"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Special Request</label><textarea name="special_request" class="form-control" rows="3"></textarea></div>
+      <button type="submit" class="btn btn-primary">Submit Request</button>
+    </form>
+  </div>
+</div></section>
+{% endblock %}

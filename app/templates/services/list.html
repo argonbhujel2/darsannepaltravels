@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Services | Darshan Nepal Travel & Tours{% endblock %}
+{% block content %}
+<section class="page-hero"><div class="container"><h1>Our Services</h1><p>Everything you need to travel Nepal with confidence.</p></div></section>
+<section class="section"><div class="container">
+  <div class="service-grid">
+    {% for s in services %}
+    <a href="{{ url_for('services.service_detail', slug=s.slug) }}" class="service-card">
+      <div class="service-icon">◆</div>
+      <h3>{{ s.title }}</h3>
+      <p>{{ s.description[:100] if s.description else '' }}</p>
+    </a>
+    {% endfor %}
+  </div>
+</div></section>
+{% endblock %}

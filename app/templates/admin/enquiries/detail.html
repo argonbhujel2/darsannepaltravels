@@ -1,0 +1,30 @@
+{% extends 'admin/base.html' %}
+{% block title %}Enquiry {{ enquiry.reference_id }}{% endblock %}
+{% block content %}
+<div class="admin-header"><h1>Enquiry {{ enquiry.reference_id }}</h1>
+<a href="{{ url_for('admin.enquiries_list') }}" class="btn btn-outline btn-sm">Back</a></div>
+<div class="admin-card">
+<p><strong>Name:</strong> {{ enquiry.name }}</p>
+<p><strong>Phone:</strong> <a href="tel:{{ enquiry.phone }}">{{ enquiry.phone }}</a></p>
+<p><strong>Email:</strong> {{ enquiry.email or '—' }}</p>
+<p><strong>Destination:</strong> {{ enquiry.destination or '—' }}</p>
+<p><strong>Package:</strong> {{ enquiry.package_title or '—' }}</p>
+<p><strong>Travel Date:</strong> {{ enquiry.travel_date.strftime('%d %b %Y') if enquiry.travel_date else '—' }}</p>
+<p><strong>Travelers:</strong> {{ enquiry.travelers }} (Adults: {{ enquiry.adults }}, Children: {{ enquiry.children }})</p>
+<p><strong>Type:</strong> {{ enquiry.travel_type or '—' }}</p>
+<p><strong>Message:</strong></p>
+<p style="white-space:pre-line;background:var(--color-surface-alt);padding:1rem;border-radius:8px">{{ enquiry.message or '—' }}</p>
+<form method="post" style="margin-top:1.5rem">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<div class="form-group"><label class="form-label">Status</label>
+<select name="status" class="form-control form-select">
+{% for s in ['New','Contacted','Following Up','Confirmed','Completed','Cancelled','Spam'] %}
+<option value="{{ s }}" {% if enquiry.status==s %}selected{% endif %}>{{ s }}</option>
+{% endfor %}
+</select></div>
+<div class="form-group"><label class="form-label">Internal Notes</label>
+<textarea name="internal_notes" class="form-control" rows="3">{{ enquiry.internal_notes or '' }}</textarea></div>
+<button type="submit" class="btn btn-primary">Update</button>
+</form>
+</div>
+{% endblock %}

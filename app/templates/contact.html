@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Contact Us | Darshan Nepal Travel & Tours{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container"><h1>Contact Us</h1><p>We're based in Urlabari, Koshi Province — ready to help plan your next journey.</p></div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="pkg-layout">
+      <div>
+        {% if success %}
+        <div class="alert alert-success">Thank you! Your message has been received. We'll get back to you soon.</div>
+        {% endif %}
+        {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+        <form method="post" class="admin-card">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <div class="form-group">
+            <label class="form-label" for="name">Name *</label>
+            <input type="text" name="name" id="name" class="form-control" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="phone">Phone</label>
+              <input type="tel" name="phone" id="phone" class="form-control">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="email">Email</label>
+              <input type="email" name="email" id="email" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="subject">Subject</label>
+            <input type="text" name="subject" id="subject" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="message">Message *</label>
+            <textarea name="message" id="message" class="form-control" required rows="5"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+      </div>
+      <aside>
+        <div class="admin-card">
+          <h3 style="margin-bottom:1rem">{{ business_name }}</h3>
+          <p style="font-size:var(--text-small);margin-bottom:0.75rem">{{ business_address }}</p>
+          {% for phone in business_phones %}
+          <p style="margin-bottom:0.4rem"><a href="tel:{{ phone }}" style="font-weight:600">{{ phone }}</a></p>
+          {% endfor %}
+          <div style="margin-top:1.5rem;display:flex;flex-direction:column;gap:0.5rem">
+            <a href="tel:{{ business_phone }}" class="btn btn-primary btn-block">Call Now</a>
+            <a href="{{ url_for('enquiries.plan_trip') }}" class="btn btn-outline btn-block">Send Enquiry</a>
+          </div>
+          <div style="margin-top:1.25rem;display:flex;gap:0.75rem">
+            <a href="{{ facebook_url }}" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">Facebook</a>
+            <a href="{{ instagram_url }}" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">Instagram</a>
+          </div>
+        </div>
+        <div class="admin-card" style="margin-top:1rem">
+          <h4 style="margin-bottom:0.75rem">Location</h4>
+          <p style="font-size:var(--text-small);color:var(--color-muted)">Urlabari, Koshi Province 56604, Nepal</p>
+          <p style="font-size:var(--text-xs);color:var(--color-muted);margin-top:0.5rem">Map integration can be configured in admin settings.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+{% endblock %}

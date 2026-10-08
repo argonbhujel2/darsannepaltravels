@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.seo_title or post.title }} | Darshan Nepal Travel{% endblock %}
+{% block meta_description %}{{ post.seo_description or post.excerpt }}{% endblock %}
+{% block content %}
+<section class="page-hero"><div class="container">
+  <p class="eyebrow" style="color:var(--color-secondary-light)">{{ post.category or 'Travel' }}</p>
+  <h1>{{ post.title }}</h1>
+  {% if post.published_date %}<p>{{ post.published_date.strftime('%d %B %Y') }} · {{ post.author }}</p>{% endif %}
+</div></section>
+<section class="section"><div class="container" style="max-width:720px">
+  <div class="breadcrumbs"><a href="{{ url_for('main.home') }}">Home</a> <span>/</span> <a href="{{ url_for('blog.list_posts') }}">Blog</a> <span>/</span> {{ post.title }}</div>
+  <div style="margin-top:1.5rem;white-space:pre-line;line-height:1.8">{{ post.content }}</div>
+  {% if related %}
+  <h3 style="margin:2.5rem 0 1rem">Related Stories</h3>
+  <div class="card-grid">
+    {% for r in related %}
+    <article class="package-card"><div class="package-card-body">
+      <h3><a href="{{ url_for('blog.post_detail', slug=r.slug) }}">{{ r.title }}</a></h3>
+      <p>{{ r.excerpt }}</p>
+    </div></article>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div></section>
+{% endblock %}
+{% block structured_data %}
+{{ super() }}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"{{ post.title|e }}","description":"{{ (post.excerpt or '')|e }}","author":{"@type":"Organization","name":"{{ post.author }}"},"publisher":{"@type":"Organization","name":"{{ business_name }}"}}
+</script>
+{% endblock %}

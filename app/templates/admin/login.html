@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | Darshan Nepal Travel & Tours</title>
+  <meta name="robots" content="noindex, nofollow">
+  {% if favicon_url %}<link rel="icon" href="{{ favicon_url }}">{% endif %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+  <div class="login-page">
+    <div class="login-visual">
+      <div class="login-visual-content">
+        <h2>Discover Nepal.</h2>
+        <p>Experience the Extraordinary — manage packages, enquiries and more.</p>
+      </div>
+    </div>
+    <div class="login-form-side">
+      <div class="login-form-box">
+        <div class="logo">
+          {% if logo_url %}
+          <img src="{{ logo_url }}" alt="{{ business_name }}" class="logo-img" width="48" height="48">
+          {% else %}
+          <span class="logo-mark">DN</span>
+          {% endif %}
+          <span class="logo-text" style="color:var(--color-primary)">Darshan Nepal<span>Travel &amp; Tours</span></span>
+        </div>
+        <h1>Welcome Back</h1>
+        <p class="subtitle">Sign in to the admin panel</p>
+        {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+        <form method="post" action="{{ url_for('admin.login') }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <div class="form-group">
+            <label class="form-label" for="email">Email</label>
+            <input type="email" name="email" id="email" class="form-control" required autocomplete="username" autofocus>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <div class="password-wrap">
+              <input type="password" name="password" id="password" class="form-control" required autocomplete="current-password">
+              <button type="button" class="password-toggle" data-toggle-password="password">Show</button>
+            </div>
+          </div>
+          <div class="remember-row">
+            <label><input type="checkbox" name="remember" value="1"> Remember Me</label>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block btn-lg">Sign In</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>

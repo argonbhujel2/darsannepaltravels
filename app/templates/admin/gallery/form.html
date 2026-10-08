@@ -1,0 +1,39 @@
+{% extends 'admin/base.html' %}
+{% block title %}Add Gallery Image{% endblock %}
+{% block content %}
+<div class="admin-header"><h1>Add Gallery Image</h1></div>
+<form method="post" class="admin-card admin-form" enctype="multipart/form-data" id="gallery-form">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<div class="form-group">
+  <label class="form-label">Upload Image *</label>
+  <input type="file" name="image_file" id="image_file" class="form-control" accept="image/*">
+  <p class="text-xs text-muted" style="margin-top:0.35rem">Or paste image URL below</p>
+</div>
+<div class="form-group">
+  <label class="form-label">Image URL</label>
+  <input type="url" name="image_url" id="image_url" class="form-control" placeholder="https://...">
+</div>
+<div id="preview" style="display:none;margin-bottom:1rem">
+  <img id="preview-img" src="" alt="Preview" style="max-height:160px;border-radius:8px">
+</div>
+<div class="form-group"><label class="form-label">Alt Text</label><input type="text" name="alt_text" class="form-control"></div>
+<div class="form-group"><label class="form-label">Caption</label><input type="text" name="caption" class="form-control"></div>
+<div class="form-group"><label class="form-label">Category</label>
+<select name="category" class="form-control form-select">
+<option value="">—</option>
+{% for c in ['Mountains','Temples','Lakes','Trekking','Road Trips','Culture','Family Trips','School Trips','Pilgrimage','Tour Groups'] %}
+<option value="{{ c }}">{{ c }}</option>
+{% endfor %}
+</select></div>
+<div class="form-actions"><button type="submit" class="btn btn-primary">Add</button><a href="{{ url_for('admin.gallery_list') }}" class="btn btn-outline">Cancel</a></div>
+</form>
+<script>
+document.getElementById('image_file').addEventListener('change', function(e) {
+  const f = e.target.files[0];
+  if (!f) return;
+  const url = URL.createObjectURL(f);
+  document.getElementById('preview').style.display = 'block';
+  document.getElementById('preview-img').src = url;
+});
+</script>
+{% endblock %}

@@ -1,0 +1,230 @@
+/* ============================================================
+   Animations — Vanilla CSS + IntersectionObserver triggers
+   ============================================================ */
+
+/* Scroll reveal base */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* Fade from left / right */
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-32px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+.reveal-right {
+  opacity: 0;
+  transform: translateX(32px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Scale up */
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.94);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal-scale.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Hero content entrance */
+.hero-content .eyebrow {
+  animation: fadeUp 0.8s ease 0.15s both;
+}
+.hero-content h1 {
+  animation: fadeUp 0.9s ease 0.3s both;
+}
+.hero-content .hero-desc {
+  animation: fadeUp 0.9s ease 0.45s both;
+}
+.hero-content .hero-actions {
+  animation: fadeUp 0.9s ease 0.6s both;
+}
+.hero-content .hero-rating {
+  animation: fadeUp 0.9s ease 0.75s both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Subtle hero bg drift */
+.hero-bg {
+  animation: heroDrift 28s ease-in-out infinite alternate;
+}
+@keyframes heroDrift {
+  from { transform: scale(1) translate(0, 0); }
+  to   { transform: scale(1.06) translate(-1%, -1%); }
+}
+
+/* Search card rise */
+.search-card {
+  animation: searchRise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both;
+}
+@keyframes searchRise {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Button micro-interaction */
+.btn {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.btn-primary:hover,
+.btn-secondary:hover {
+  box-shadow: 0 6px 20px rgba(26, 60, 52, 0.25);
+}
+
+/* Package card stagger feel */
+.package-card {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.35s ease;
+}
+.package-card:hover {
+  transform: translateY(-6px);
+}
+
+/* Trust value count-style pulse on reveal */
+.trust-item.reveal.visible .trust-value {
+  animation: trustPop 0.5s ease 0.2s both;
+}
+@keyframes trustPop {
+  from { transform: scale(0.85); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+/* Nav link underline grow */
+.navbar.scrolled .nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 0.85rem;
+  right: 0.85rem;
+  height: 2px;
+  background: var(--color-secondary);
+  border-radius: 1px;
+  transform: scaleX(0);
+  transition: transform 0.25s ease;
+}
+.navbar.scrolled .nav-link:hover::after,
+.navbar.scrolled .nav-link.active::after {
+  transform: scaleX(1);
+}
+
+/* Mobile nav drawer items stagger */
+.mobile-nav.open .nav-link {
+  animation: slideInRight 0.35s ease both;
+}
+.mobile-nav.open .nav-link:nth-child(1) { animation-delay: 0.05s; }
+.mobile-nav.open .nav-link:nth-child(2) { animation-delay: 0.08s; }
+.mobile-nav.open .nav-link:nth-child(3) { animation-delay: 0.11s; }
+.mobile-nav.open .nav-link:nth-child(4) { animation-delay: 0.14s; }
+.mobile-nav.open .nav-link:nth-child(5) { animation-delay: 0.17s; }
+.mobile-nav.open .nav-link:nth-child(6) { animation-delay: 0.2s; }
+.mobile-nav.open .nav-link:nth-child(7) { animation-delay: 0.23s; }
+.mobile-nav.open .nav-link:nth-child(8) { animation-delay: 0.26s; }
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Feature / service icon soft bounce on hover */
+.feature-icon,
+.service-icon {
+  transition: transform 0.3s ease;
+}
+.feature-card:hover .feature-icon,
+.service-card:hover .service-icon {
+  transform: scale(1.12) rotate(-3deg);
+}
+
+/* CTA section soft glow pulse */
+.cta-section {
+  position: relative;
+  overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(196, 92, 38, 0.2) 0%, transparent 70%);
+  top: -100px;
+  right: -80px;
+  animation: ctaGlow 6s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes ctaGlow {
+  from { opacity: 0.5; transform: translate(0, 0); }
+  to   { opacity: 1; transform: translate(-30px, 20px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-left,
+  .reveal-right,
+  .reveal-scale {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .hero-content .eyebrow,
+  .hero-content h1,
+  .hero-content .hero-desc,
+  .hero-content .hero-actions,
+  .hero-content .hero-rating,
+  .search-card,
+  .hero-bg,
+  .mobile-nav.open .nav-link {
+    animation: none !important;
+  }
+  .cta-section::before {
+    animation: none;
+  }
+}

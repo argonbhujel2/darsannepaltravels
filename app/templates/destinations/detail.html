@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}{{ destination.seo_title or destination.name }} | Darshan Nepal Travel{% endblock %}
+{% block meta_description %}{{ destination.seo_description or destination.short_description }}{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <h1>{{ destination.name }}</h1>
+    <p>{{ destination.short_description }}</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="breadcrumbs">
+      <a href="{{ url_for('main.home') }}">Home</a> <span>/</span>
+      <a href="{{ url_for('destinations.list_destinations') }}">Destinations</a> <span>/</span>
+      {{ destination.name }}
+    </div>
+    <div style="max-width:720px">
+      <h2>About {{ destination.name }}</h2>
+      <p style="margin:1rem 0;white-space:pre-line">{{ destination.description or destination.short_description }}</p>
+      {% if destination.best_time %}
+      <h3 style="margin-top:1.5rem">Best Time to Visit</h3>
+      <p style="font-size:var(--text-small)">{{ destination.best_time }}</p>
+      {% endif %}
+      {% if destination.why_visit %}
+      <h3 style="margin-top:1.5rem">Why Visit</h3>
+      <p style="white-space:pre-line">{{ destination.why_visit }}</p>
+      {% endif %}
+    </div>
+    {% if packages %}
+    <h2 style="margin:2.5rem 0 1.25rem">Packages for {{ destination.name }}</h2>
+    <div class="card-grid">
+      {% for pkg in packages %}
+      <article class="package-card">
+        <div class="package-card-body">
+          <div class="package-card-meta"><span>{{ pkg.duration }}</span></div>
+          <h3><a href="{{ url_for('packages.package_detail', slug=pkg.slug) }}">{{ pkg.title }}</a></h3>
+          <p>{{ pkg.short_description }}</p>
+          <a href="{{ url_for('packages.package_detail', slug=pkg.slug) }}" class="package-card-arrow">View →</a>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <div style="margin-top:2.5rem">
+      <a href="{{ url_for('enquiries.plan_trip') }}" class="btn btn-primary">Plan a Trip to {{ destination.name }}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

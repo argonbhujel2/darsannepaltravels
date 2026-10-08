@@ -1,0 +1,16 @@
+{% extends 'admin/base.html' %}
+{% block title %}Fixed Departures{% endblock %}
+{% block content %}
+<div class="admin-header"><h1>Fixed Departures</h1><a href="{{ url_for('admin.departure_new') }}" class="btn btn-primary btn-sm">+ New</a></div>
+<div class="admin-card"><div class="table-wrap"><table>
+<thead><tr><th>Package</th><th>Departure</th><th>Seats</th><th>Status</th><th>Actions</th></tr></thead>
+<tbody>{% for d in departures %}
+<tr><td>{{ d.package.title if d.package else '—' }}</td>
+<td>{{ d.departure_date.strftime('%d %b %Y') if d.departure_date else '—' }}</td>
+<td>{{ d.available_seats }}/{{ d.total_seats }}</td>
+<td>{{ d.status }}</td>
+<td><a href="{{ url_for('admin.departure_edit', id=d.id) }}">Edit</a>
+<form method="post" action="{{ url_for('admin.departure_delete', id=d.id) }}" style="display:inline" data-confirm="Delete?"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit" class="btn btn-ghost btn-sm" style="color:var(--color-danger)">Delete</button></form></td></tr>
+{% else %}<tr><td colspan="5">None.</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

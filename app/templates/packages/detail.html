@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% block title %}{{ package.seo_title or package.title }} | Darshan Nepal Travel{% endblock %}
+{% block meta_description %}{{ package.seo_description or package.short_description }}{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <p class="eyebrow" style="color:var(--color-secondary-light)">{{ package.destination }} · {{ package.duration }}</p>
+    <h1>{{ package.title }}</h1>
+    <p>{{ package.short_description }}</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="breadcrumbs">
+      <a href="{{ url_for('main.home') }}">Home</a> <span>/</span>
+      <a href="{{ url_for('packages.list_packages') }}">Packages</a> <span>/</span>
+      {{ package.title }}
+    </div>
+    <div class="pkg-layout">
+      <div>
+        <h2>Overview</h2>
+        <p style="margin:1rem 0 1.5rem;white-space:pre-line">{{ package.full_description or package.short_description }}</p>
+
+        {% if package.highlights %}
+        <h3 style="margin-bottom:0.75rem">Highlights</h3>
+        <ul style="margin-bottom:1.5rem">
+          {% for h in package.highlights.split('\n') if h.strip() %}
+          <li style="padding:0.3rem 0;padding-left:1.25rem;position:relative">
+            <span style="position:absolute;left:0;color:var(--color-secondary)">✓</span> {{ h.strip() }}
+          </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if package.itinerary_items.count() > 0 %}
+        <h3 style="margin-bottom:1rem">Itinerary</h3>
+        <div class="itinerary">
+          {% for day in package.itinerary_items %}
+          <div class="itinerary-day">
+            <div class="itinerary-day-num">DAY {{ day.day_number }}</div>
+            <h4>{{ day.title }}</h4>
+            {% if day.description %}<p style="font-size:var(--text-small);color:var(--color-muted);margin-top:0.35rem">{{ day.description }}</p>{% endif %}
+            <div style="display:flex;flex-wrap:wrap;gap:1rem;margin-top:0.5rem;font-size:var(--text-xs);color:var(--color-muted)">
+              {% if day.meals %}<span>Meals: {{ day.meals }}</span>{% endif %}
+              {% if day.accommodation %}<span>Stay: {{ day.accommodation }}</span>{% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if package.included %}
+        <h3 style="margin:1.5rem 0 0.75rem">Included</h3>
+        <ul>{% for i in package.included.split('\n') if i.strip() %}<li style="padding:0.25rem 0;font-size:var(--text-small)">• {{ i.strip() }}</li>{% endfor %}</ul>
+        {% endif %}
+        {% if package.excluded %}
+        <h3 style="margin:1.5rem 0 0.75rem">Excluded</h3>
+        <ul>{% for i in package.excluded.split('\n') if i.strip() %}<li style="padding:0.25rem 0;font-size:var(--text-small)">• {{ i.strip() }}</li>{% endfor %}</ul>
+        {% endif %}
+        {% if package.best_time %}
+        <h3 style="margin:1.5rem 0 0.5rem">Best Time</h3>
+        <p style="font-size:var(--text-small)">{{ package.best_time }}</p>
+        {% endif %}
+      </div>
+
+      <aside class="pkg-sticky">
+        <div class="price">{{ package.starting_price or 'On Request' }}</div>
+        <div class="price-type">{{ package.price_type }}</div>
+        <p style="font-size:var(--text-small);color:var(--color-muted);margin-bottom:1rem">
+          {{ package.duration }}{% if package.travel_type %} · {{ package.travel_type }}{% endif %}
+        </p>
+        <a href="{{ url_for('enquiries.plan_trip') }}?package={{ package.id }}" class="btn btn-primary btn-block" style="margin-bottom:0.75rem">Enquire Now</a>
+        <a href="tel:{{ business_phone }}" class="btn btn-outline btn-block">Call {{ business_phone }}</a>
+      </aside>
+    </div>
+
+    {% if related %}
+    <div style="margin-top:3rem">
+      <h2 style="margin-bottom:1.5rem">Related Packages</h2>
+      <div class="card-grid">
+        {% for pkg in related %}
+        <article class="package-card">
+          <div class="package-card-body">
+            <div class="package-card-meta"><span>{{ pkg.duration }}</span></div>
+            <h3><a href="{{ url_for('packages.package_detail', slug=pkg.slug) }}">{{ pkg.title }}</a></h3>
+            <p>{{ pkg.short_description }}</p>
+            <a href="{{ url_for('packages.package_detail', slug=pkg.slug) }}" class="package-card-arrow">View →</a>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
+{% block structured_data %}
+{{ super() }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TouristTrip",
+  "name": "{{ package.title }}",
+  "description": "{{ package.short_description|e }}",
+  "touristType": "{{ package.travel_type or 'Leisure' }}",
+  "provider": {
+    "@type": "TravelAgency",
+    "name": "{{ business_name }}",
+    "telephone": "{{ business_phone }}"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "{{ request.url_root }}"},
+    {"@type": "ListItem", "position": 2, "name": "Packages", "item": "{{ request.url_root }}packages/"},
+    {"@type": "ListItem", "position": 3, "name": "{{ package.title }}"}
+  ]
+}
+</script>
+{% endblock %}

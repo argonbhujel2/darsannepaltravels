@@ -1,0 +1,53 @@
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo" style="margin-bottom:1rem">
+          {% if logo_url %}
+          <img src="{{ logo_url }}" alt="{{ business_name }}" class="logo-img" width="40" height="40">
+          {% else %}
+          <span class="logo-mark">DN</span>
+          {% endif %}
+          <span class="logo-text">Darshan Nepal<span>Travel &amp; Tours</span></span>
+        </div>
+        <p>Your trusted partner for discovering Nepal. Domestic &amp; international packages, pilgrimage, trekking, vehicle booking and more — based in Urlabari, Koshi Province.</p>
+        <div class="footer-social">
+          <a href="{{ facebook_url }}" target="_blank" rel="noopener" aria-label="Facebook">f</a>
+          <a href="{{ instagram_url }}" target="_blank" rel="noopener" aria-label="Instagram">ig</a>
+        </div>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="{{ url_for('destinations.list_destinations') }}">Destinations</a>
+        <a href="{{ url_for('packages.list_packages') }}">Packages</a>
+        <a href="{{ url_for('fixed_departures.list_departures') }}">Fixed Departures</a>
+        <a href="{{ url_for('blog.list_posts') }}">Travel Stories</a>
+        <a href="{{ url_for('main.gallery') }}">Gallery</a>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <a href="{{ url_for('services.list_services') }}">All Services</a>
+        <a href="{{ url_for('vehicles.list_vehicles') }}">Vehicle Booking</a>
+        <a href="{{ url_for('services.list_services') }}">Air Ticketing</a>
+        <a href="{{ url_for('services.list_services') }}">Guiding</a>
+        <a href="{{ url_for('services.list_services') }}">Trekking</a>
+      </div>
+      <div class="footer-contact">
+        <h4>Contact</h4>
+        <p>{{ business_address }}</p>
+        {% for phone in business_phones %}
+        <p><a href="tel:{{ phone }}">{{ phone }}</a></p>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; {{ current_year }} {{ business_name }}. All Rights Reserved.</p>
+      <div class="footer-bottom-links">
+        <a href="{{ url_for('main.privacy') }}">Privacy Policy</a>
+        <a href="{{ url_for('main.terms') }}">Terms &amp; Conditions</a>
+        <a href="{{ url_for('main.cancellation') }}">Cancellation Policy</a>
+        <span class="footer-credit">Technology by <a href="https://bamstudio.argan.com.np" target="_blank" rel="noopener noreferrer" class="footer-credit-link">BAM Studio</a></span>
+      </div>
+    </div>
+  </div>
+</footer>

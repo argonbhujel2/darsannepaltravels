@@ -1,0 +1,50 @@
+{% extends 'admin/base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="admin-header">
+  <h1>Dashboard</h1>
+  <p class="text-muted text-small">Welcome, {{ current_user.name }}</p>
+</div>
+<div class="stats-grid">
+  <div class="stat-card"><div class="stat-value">{{ stats.packages }}</div><div class="stat-label">Packages</div></div>
+  <div class="stat-card"><div class="stat-value">{{ stats.destinations }}</div><div class="stat-label">Destinations</div></div>
+  <div class="stat-card"><div class="stat-value">{{ stats.enquiries_new }}</div><div class="stat-label">New Enquiries</div></div>
+  <div class="stat-card"><div class="stat-value">{{ stats.enquiries_total }}</div><div class="stat-label">Total Enquiries</div></div>
+  <div class="stat-card"><div class="stat-value">{{ stats.customers }}</div><div class="stat-label">Customers</div></div>
+  <div class="stat-card"><div class="stat-value">{{ stats.departures }}</div><div class="stat-label">Upcoming Departures</div></div>
+  <div class="stat-card"><div class="stat-value">{{ stats.gallery }}</div><div class="stat-label">Gallery Images</div></div>
+  <div class="stat-card"><div class="stat-value">{{ stats.messages }}</div><div class="stat-label">New Messages</div></div>
+</div>
+<div class="quick-actions">
+  <a href="{{ url_for('admin.package_new') }}" class="btn btn-primary btn-sm">+ New Package</a>
+  <a href="{{ url_for('admin.destination_new') }}" class="btn btn-outline btn-sm">+ Destination</a>
+  <a href="{{ url_for('admin.departure_new') }}" class="btn btn-outline btn-sm">+ Departure</a>
+  <a href="{{ url_for('admin.vehicle_new') }}" class="btn btn-outline btn-sm">+ Vehicle</a>
+  <a href="{{ url_for('admin.enquiries_list') }}" class="btn btn-secondary btn-sm">View Enquiries</a>
+</div>
+<div class="admin-card">
+  <h2>Recent Enquiries</h2>
+  {% if recent_enquiries %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Ref</th><th>Name</th><th>Phone</th><th>Package</th><th>Status</th><th>Date</th><th></th></tr></thead>
+      <tbody>
+        {% for e in recent_enquiries %}
+        <tr>
+          <td>{{ e.reference_id }}</td>
+          <td>{{ e.name }}</td>
+          <td>{{ e.phone }}</td>
+          <td>{{ e.package_title or e.destination or '—' }}</td>
+          <td><span class="badge badge-info">{{ e.status }}</span></td>
+          <td>{{ e.created_at.strftime('%d %b %Y') if e.created_at else '' }}</td>
+          <td><a href="{{ url_for('admin.enquiry_detail', id=e.id) }}">View</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="text-muted">No enquiries yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

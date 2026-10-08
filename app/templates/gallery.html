@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Gallery | Darshan Nepal Travel{% endblock %}
+{% block content %}
+<section class="page-hero"><div class="container"><h1>Gallery</h1><p>Moments from journeys across Nepal.</p></div></section>
+<section class="section"><div class="container">
+  {% if categories %}
+  <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.5rem">
+    <a href="{{ url_for('main.gallery') }}" class="btn btn-sm {% if not active_category %}btn-primary{% else %}btn-outline{% endif %}">All</a>
+    {% for c in categories %}
+    <a href="{{ url_for('main.gallery', category=c) }}" class="btn btn-sm {% if active_category == c %}btn-primary{% else %}btn-outline{% endif %}">{{ c }}</a>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% if images %}
+  <div class="gallery-grid">
+    {% for img in images %}
+    <div class="gallery-item" data-gallery-item data-src="{{ img.image_url }}" data-caption="{{ img.caption or img.alt_text or '' }}">
+      <img src="{{ img.image_url }}" alt="{{ img.alt_text or 'Nepal travel' }}" loading="lazy" width="400" height="300">
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <h3>Gallery coming soon</h3>
+    <p>We're collecting moments from the road. Check back soon.</p>
+  </div>
+  {% endif %}
+</div></section>
+{% endblock %}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/gallery.js') }}"></script>
+{% endblock %}
